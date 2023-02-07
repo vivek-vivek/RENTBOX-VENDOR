@@ -1,6 +1,14 @@
+// ignore_for_file: must_be_immutable
+
+import 'dart:developer';
+
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-// ignore: must_be_immutable
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:rentbox_vendor/res/constant/image.dart';
+import 'package:rentbox_vendor/res/style/colors.dart';
+import 'package:rentbox_vendor/view_model/Vendor%20Auth/login.dart';
+import 'package:rentbox_vendor/view_model/home/home_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   bool isLoggedIn;
@@ -17,27 +25,21 @@ class SplashScreen extends StatelessWidget {
     return AnimatedSplashScreen(
       duration: 3000,
       backgroundColor: Colors.black,
-      splash: Container(
+      splash: SizedBox(
         width: 5000,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(AssetsNames.splashImage),
-            fit: BoxFit.cover,
-          ),
-        ),
         child: Center(
           child: Text(
-            "RENTBOX",
+            "RENTBOX- VENDOR",
             style: GoogleFonts.truculenta(
-              color: CommonColors.kWhite,
+              color: MyColors.black,
               fontWeight: FontWeight.w700,
-              letterSpacing: 16,
+              letterSpacing: 10,
               fontSize: rsize.width * 0.1,
             ),
           ),
         ),
       ),
-      nextScreen: isLoggedIn == true ? const MyAppScreen() : LoginScreen(),
+      nextScreen: isLoggedIn == true ? const HomeScreen() : LoginScreen(),
       // nextScreen: const MyAppScreen(),
       splashTransition: SplashTransition.fadeTransition,
     );
