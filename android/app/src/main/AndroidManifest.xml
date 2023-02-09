@@ -7,8 +7,6 @@
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyAg4YSPeGMhjto67il4XQ0vaDIFO5giC1s"/>
-        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
