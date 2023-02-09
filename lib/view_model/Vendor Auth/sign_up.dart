@@ -196,7 +196,8 @@ class SignUpScreen extends StatelessWidget {
                                           password:
                                               pro.passwordController.text);
                                       SignUpApiServices().signUpApiServices(
-                                        signupModel: signupModel,
+                                        name: pro.nameController.text,
+                                        password: pro.passwordController.text,
                                         context: context,
                                         mobile: pro.phoneNumberController.text,
                                       );

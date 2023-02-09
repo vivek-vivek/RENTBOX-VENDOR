@@ -5,7 +5,6 @@ import 'dart:developer';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rentbox_vendor/res/constant/image.dart';
 import 'package:rentbox_vendor/res/style/colors.dart';
 import 'package:rentbox_vendor/view_model/Vendor%20Auth/login.dart';
 import 'package:rentbox_vendor/view_model/home/home_screen.dart';

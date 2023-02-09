@@ -14,15 +14,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LoginApiServices {
   Future loginApiServices({mobile, password, context}) async {
     try {
-      log("$mobile  :  $password ");
-
+      log("hi ");
+      log("$mobile $password");
       Response response = await Dio()
-          .post(ApiUrls.baseUrl + ApiUrls.auth + ApiUrls.login, data: {
+          .post("${ApiUrls.baseUrl}${ApiUrls.auth}${ApiUrls.login}", data: {
         "mobile": mobile,
         "password": password,
       });
 
-      //.timeout(const Duration(seconds: 120))
+      log(response.statusCode.toString());
 
       // LOGIN coplete
       if (response.statusCode == 201) {

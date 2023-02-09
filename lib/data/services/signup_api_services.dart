@@ -5,7 +5,6 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
-import 'package:rentbox_vendor/res/constant/urls.dart';
 import 'package:rentbox_vendor/view_model/Vendor%20Auth/otp.dart';
 
 import '../../res/components/warning_widgets.dart';
@@ -16,15 +15,18 @@ class SignUpApiServices {
   /// get values form the UI screen and make a new user
   /// if the user not alredy exisists.
   Future signUpApiServices(
-      {required signupModel,
-      required BuildContext context,
+      {required BuildContext context,
+      required name,
+      required password,
       required mobile}) async {
     try {
       log("otp send akum  eppo , waite cheyii ... eppo kittum");
+      log("http://localhost:5001/vendor/signup");
+
       // This will genarate a response from the api
-      final response = await Dio().post(
-          ApiUrls.baseUrl + ApiUrls.auth + ApiUrls.signup,
-          data: signupModel.toJson());
+      Response response = await Dio().post(
+          "http://192.168.0.169:5001/vendor/signup",
+          data: {"name": name, "mobile": mobile, "password": password});
       // This will send the response to the UI screen
       // Printing the response from the above function
       log(response.toString());

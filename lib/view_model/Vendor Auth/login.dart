@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -147,7 +148,6 @@ class LoginScreen extends StatelessWidget {
                             ),
                             onTap: () {
                               if (_formKey.currentState!.validate()) {
-                                log("${value.mobileController.text}  :   ${value.passwordController.text} ");
                                 LoginApiServices().loginApiServices(
                                     context: context,
                                     password: value.passwordController.text,

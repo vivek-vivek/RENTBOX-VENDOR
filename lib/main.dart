@@ -1,10 +1,15 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:rentbox_vendor/data/provider/add_car.dart';
 import 'package:rentbox_vendor/data/provider/login_provider.dart';
 import 'package:rentbox_vendor/data/provider/signup_provider.dart';
+import 'package:rentbox_vendor/view_model/Google%20Map/map_screen.dart';
+import 'package:rentbox_vendor/view_model/Rent%20My%20Cars/rent_my_car.dart';
+import 'package:rentbox_vendor/view_model/product/product_landing_screen.dart';
+import 'package:rentbox_vendor/view_model/product/single_product_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'view_model/Splash Screen/splash_screen.dart';
+import 'view_model/Splash/splash_screen.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,12 +29,18 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<SignupProvider>(create: (_) => SignupProvider()),
         ChangeNotifierProvider<LoginProvider>(create: (_) => LoginProvider()),
+        ChangeNotifierProvider<AddCarProvider>(create: (_) => AddCarProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+        theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
+        initialRoute: '/',
+        routes: {
+          '/allCars': (context) => const ProductLandingScreen(),
+          '/singleProduct': (context) => const SingleProductScreen(),
+          '/mapScreen': (context) => const MapScreen(),
+          '/rentMyCar': (context) => const RentMyCar(),
+        },
         home: SplashScreen(isLoggedIn: isLoggedIn),
         // home: MapScreen(),
       ),
