@@ -46,7 +46,6 @@ dependencies:
   geolocator: ^9.0.2
   card_swiper: ^2.0.4
   image_picker: ^0.8.6+1
-  multi_image_picker: ^4.7.10
   
 
 dev_dependencies:

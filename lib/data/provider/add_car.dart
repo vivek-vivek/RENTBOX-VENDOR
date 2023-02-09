@@ -48,7 +48,7 @@ class AddCarProvider with ChangeNotifier {
   ///
   /// this will [delete] the image from yu selected
   void deleteImageList(int index) {
-    imagelist.removeAt(index);
+    imagelist.removeAt(index); // using list index
     notifyListeners();
   }
 }

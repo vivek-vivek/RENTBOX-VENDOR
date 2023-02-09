@@ -328,14 +328,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.0"
-  multi_image_picker:
-    dependency: "direct main"
-    description:
-      name: multi_image_picker
-      sha256: "3071bef51d4165f152bde7e22b6f6769745acd5939d70b9fc3d0c9137dbd0a15"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.8.01"
   nested:
     dependency: transitive
     description:
