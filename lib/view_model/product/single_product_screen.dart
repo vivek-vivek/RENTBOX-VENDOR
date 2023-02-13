@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rentbox_vendor/res/constant/image_name.dart';
 import 'package:rentbox_vendor/res/style/colors.dart';
 import 'package:rentbox_vendor/view_model/Google%20Map/map_screen.dart';
@@ -164,12 +161,12 @@ class _MyTabbedPageState extends State<MyTabbedPage>
 class FirstScreen extends StatelessWidget {
   const FirstScreen({Key? key}) : super(key: key);
 
-  static const CameraPosition _kGoogle =
-      CameraPosition(target: LatLng(10.1632, 76.6413), zoom: 14.4746);
+  // static const CameraPosition _kGoogle =
+  //     CameraPosition(target: LatLng(10.1632, 76.6413), zoom: 14.4746);
 
   @override
   Widget build(BuildContext context) {
-    Completer<GoogleMapController> controllers = Completer();
+    // Completer<GoogleMapController> controllers = Completer();
     final rsize = MediaQuery.of(context).size;
     return Padding(
       padding: EdgeInsets.only(top: rsize.width * 0.02),

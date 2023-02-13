@@ -46,6 +46,8 @@ dependencies:
   geolocator: ^9.0.2
   card_swiper: ^2.0.4
   image_picker: ^0.8.6+1
+  cloudinary: ^1.1.0
+
   
 
 dev_dependencies:
@@ -76,6 +78,10 @@ flutter:
     - lib/view/car.jpg
     - lib/view/car1inside.png
     - lib/view/car1top.png
+    - lib/view/loading.gif
+    - lib/view/mr-bean-waiting.gif
+    - lib/view/guy1.gif
+    - lib/view/successgif.gif
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,10 +1,13 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:rentbox_vendor/data/provider/add_car.dart';
+import 'package:rentbox_vendor/data/provider/location_proivider.dart';
 import 'package:rentbox_vendor/data/provider/login_provider.dart';
+import 'package:rentbox_vendor/data/provider/my_cars.dart';
 import 'package:rentbox_vendor/data/provider/signup_provider.dart';
 import 'package:rentbox_vendor/view_model/Google%20Map/map_screen.dart';
 import 'package:rentbox_vendor/view_model/Rent%20My%20Cars/rent_my_car.dart';
+import 'package:rentbox_vendor/view_model/Rent%20My%20Cars/sucess.dart';
 import 'package:rentbox_vendor/view_model/product/product_landing_screen.dart';
 import 'package:rentbox_vendor/view_model/product/single_product_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,6 +33,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<SignupProvider>(create: (_) => SignupProvider()),
         ChangeNotifierProvider<LoginProvider>(create: (_) => LoginProvider()),
         ChangeNotifierProvider<AddCarProvider>(create: (_) => AddCarProvider()),
+        ChangeNotifierProvider<LocationProvider>(
+            create: (_) => LocationProvider()),
+        ChangeNotifierProvider<MyCarsProvider>(create: (_) => MyCarsProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -40,6 +46,7 @@ class MyApp extends StatelessWidget {
           '/singleProduct': (context) => const SingleProductScreen(),
           '/mapScreen': (context) => const MapScreen(),
           '/rentMyCar': (context) => const RentMyCar(),
+          '/succesSplash': (context) => const SuccessSplash(),
         },
         home: SplashScreen(isLoggedIn: isLoggedIn),
         // home: MapScreen(),

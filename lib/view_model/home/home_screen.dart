@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:rentbox_vendor/data/provider/location_proivider.dart';
 import 'package:rentbox_vendor/res/constant/image_name.dart';
 import 'package:rentbox_vendor/res/style/colors.dart';
+import 'package:rentbox_vendor/view_model/Rent%20My%20Cars/rent_my_car.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -138,7 +143,7 @@ class HomeScreen extends StatelessWidget {
 }
 
 ///
-///-----------------------DRAWER OF HOME BAR---------------------------------///
+///-----------------------DRAWER IN HOME BAR---------------------------------///
 ///
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({
@@ -177,7 +182,14 @@ class DrawerWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(10),
             child: InkWell(
-              onTap: () => Navigator.pushNamed(context, '/rentMyCar'),
+              onTap: () async {
+                Navigator.pushNamed(context, '/rentMyCar');
+                await Provider.of<LocationProvider>(context, listen: false)
+                    .getLocationResponse(context);
+
+                // Navigator.of(context)
+                //     .push(MaterialPageRoute(builder: (context) => RentMyCar()));
+              },
               child: Container(
                 decoration: BoxDecoration(
                   color: MyColors.white,

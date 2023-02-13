@@ -60,7 +60,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> commonSnackBar(
     {String text = '',
     Color bgColor = MyColors.white,
     Color textColor = MyColors.btnText,
-    context}) {
+    required context}) {
   return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     clipBehavior: Clip.hardEdge,
     dismissDirection: DismissDirection.horizontal,

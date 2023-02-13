@@ -5,6 +5,8 @@ import 'dart:developer';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:rentbox_vendor/data/provider/my_cars.dart';
 import 'package:rentbox_vendor/res/style/colors.dart';
 import 'package:rentbox_vendor/view_model/Vendor%20Auth/login.dart';
 import 'package:rentbox_vendor/view_model/home/home_screen.dart';
@@ -19,6 +21,11 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+    //   await Provider.of<MyCarsProvider>(context, listen: false)
+    //       .getMyCars(context: context);
+    // });
+
     log(isLoggedIn.toString());
     final rsize = MediaQuery.of(context).size;
     return AnimatedSplashScreen(
@@ -39,7 +46,7 @@ class SplashScreen extends StatelessWidget {
         ),
       ),
       nextScreen: isLoggedIn == true ? const HomeScreen() : LoginScreen(),
-      // nextScreen: const MyAppScreen(),
+      // nextScreen: const HomeScreen(),
       splashTransition: SplashTransition.fadeTransition,
     );
   }
