@@ -25,6 +25,7 @@ class LocationProvider with ChangeNotifier {
   // Function --> ( 1 )
   /// Response from the server(http://localhost:5001)
   getLocationResponse(context) async {
+    final rsize = MediaQuery.of(context).size;
     // Response from  class HomeServise -location
     Provider.of<AddCarProvider>(context, listen: false).loading(true);
     notifyListeners();
@@ -60,7 +61,18 @@ class LocationProvider with ChangeNotifier {
         id.add(element.id);
         pickupName.add(element.name);
         dropdownItems.add(
-            DropdownMenuItem(value: element.id, child: Text(element.name)));
+          DropdownMenuItem(
+            alignment: Alignment.centerLeft,
+            value: element.id,
+            child: Padding(
+              padding: EdgeInsets.only(left: rsize.width * 0.1),
+              child: Text(
+                element.name,
+                style: TextStyle(fontSize: rsize.width * 0.032),
+              ),
+            ),
+          ),
+        );
         notifyListeners();
       }
 

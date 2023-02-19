@@ -1,6 +1,6 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:rentbox_vendor/data/provider/add_car.dart';
 import 'package:rentbox_vendor/data/services/my_cars.dart';
 
 import '../../models/mycars.dart';
@@ -19,15 +19,45 @@ class MyCarsProvider with ChangeNotifier {
   List<dynamic> locationid = [];
   List<dynamic> locationName = [];
 
-  Future getMyCars({context}) async {
-    Provider.of<AddCarProvider>(context).loading(true);
-    response.clear();
-    response = await MyCarsService().fetchCars();
+  List<Car> cars = [];
+
+  var index;
+  bool isloading = false;
+  loading(boolv) {
+    isloading = boolv;
+    log(boolv.toString());
+    notifyListeners();
+  }
+
+  void setIndex(cindex) {
+    index = cindex;
+    notifyListeners();
+  }
+
+  Future getMyCars({required context}) async {
+    loading(true);
+
+    id.clear();
+    seatNum.clear();
+    location.clear();
+    name.clear();
+    price.clear();
+    rcNumber.clear();
+    verified.clear();
+    photos.clear();
+    cars.clear();
+    response = await MyCarsService().fetchCars(context: context);
+
     for (var element in response) {
+      cars.addAll(element.cars);
+      notifyListeners();
+    }
+    for (var element in cars) {
       id.add(element.id);
       seatNum.add(element.seatNum);
       location.add(element.location);
       name.add(element.name);
+      log(element.name);
       price.add(element.price);
       rcNumber.add(element.rcNumber);
       verified.add(element.verified);
@@ -40,7 +70,8 @@ class MyCarsProvider with ChangeNotifier {
       locationName.add(element.location);
       notifyListeners();
     }
+
+    loading(false);
     notifyListeners();
-    Provider.of<AddCarProvider>(context).loading(true);
   }
 }

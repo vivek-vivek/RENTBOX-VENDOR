@@ -81,8 +81,10 @@ class LoginScreen extends StatelessWidget {
                                 color: MyColors.black,
                               ),
                               border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      (respHeight * 0.02))),
+                                borderRadius: BorderRadius.circular(
+                                  (respHeight * 0.02),
+                                ),
+                              ),
                               labelStyle: GoogleFonts.anybody(
                                   color: MyColors.black,
                                   fontSize: respHeight * 0.035),

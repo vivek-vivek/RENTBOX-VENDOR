@@ -3,17 +3,25 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:rentbox_vendor/data/provider/location_proivider.dart';
+import 'package:rentbox_vendor/data/provider/change_data.dart';
+import 'package:rentbox_vendor/data/provider/my_cars.dart';
+import 'package:rentbox_vendor/data/services/my_cars.dart';
 import 'package:rentbox_vendor/res/constant/image_name.dart';
 import 'package:rentbox_vendor/res/style/colors.dart';
-import 'package:rentbox_vendor/view_model/Rent%20My%20Cars/rent_my_car.dart';
+import 'package:rentbox_vendor/view_model/home/drawer.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
   Widget build(BuildContext context) {
     final rsize = MediaQuery.of(context).size;
+    log(Provider.of<ChangeBasicsProvider>(context).profileUrl.toString());
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: MyColors.black),
@@ -22,11 +30,15 @@ class HomeScreen extends StatelessWidget {
         actions: [
           Padding(
             padding: EdgeInsets.only(
-              right: rsize.width * 0.05,
+              right: rsize.width * 0.04,
               top: rsize.width * 0.025,
             ),
             child: CircleAvatar(
-              backgroundImage: const AssetImage("lib/view/user.png"),
+              backgroundImage: NetworkImage(
+                Provider.of<ChangeBasicsProvider>(context)
+                    .profileUrl
+                    .toString(),
+              ),
               radius: rsize.width * 0.075,
             ),
           )
@@ -37,7 +49,7 @@ class HomeScreen extends StatelessWidget {
         children: [
           SizedBox(height: rsize.width * 0.075),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: rsize.width * 0.05),
+            padding: EdgeInsets.symmetric(horizontal: rsize.width * 0.04),
             child: Text(
               "Let's provide best Cars",
               style: GoogleFonts.truculenta(
@@ -50,12 +62,12 @@ class HomeScreen extends StatelessWidget {
           ),
           SizedBox(height: rsize.width * 0.025),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: rsize.width * 0.05),
+            padding: EdgeInsets.symmetric(horizontal: rsize.width * 0.04),
             child: const Divider(color: MyColors.black),
           ),
-          SizedBox(height: rsize.width * 0.05),
+          SizedBox(height: rsize.width * 0.04),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: rsize.width * 0.05),
+            padding: EdgeInsets.symmetric(horizontal: rsize.width * 0.04),
             child: InkWell(
               child: Container(
                 decoration: BoxDecoration(
@@ -73,7 +85,7 @@ class HomeScreen extends StatelessWidget {
                       color: MyColors.btnText,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 5,
-                      fontSize: rsize.width * 0.05,
+                      fontSize: rsize.width * 0.04,
                     ),
                   ),
                 ),
@@ -82,7 +94,7 @@ class HomeScreen extends StatelessWidget {
           ),
           SizedBox(height: rsize.width * 0.1),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: rsize.width * 0.05),
+            padding: EdgeInsets.symmetric(horizontal: rsize.width * 0.04),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -108,7 +120,12 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    onPressed: () => Navigator.pushNamed(context, '/allCars'),
+                    onPressed: () async {
+                      Provider.of<MyCarsProvider>(context, listen: false)
+                          .getMyCars(context: context);
+
+                      Navigator.pushNamed(context, '/allCars');
+                    },
                     child: Text(
                       "More",
                       style: GoogleFonts.lato(
@@ -122,18 +139,12 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: rsize.width * 0.05),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: const ScrollPhysics(),
-            itemCount: 4,
-            separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(height: rsize.width * 0.10);
-            },
-            itemBuilder: (BuildContext context, int index) {
-              return MyCars(rsize: rsize);
-            },
-          ),
+          SizedBox(height: rsize.width * 0.04),
+
+          ///[MYCARS]
+          MyCars(rsize: rsize),
+
+          ///
           SizedBox(height: rsize.width * 0.1),
         ],
       ),
@@ -143,173 +154,9 @@ class HomeScreen extends StatelessWidget {
 }
 
 ///
-///-----------------------DRAWER IN HOME BAR---------------------------------///
+///--------------------------- [MY CARS[ list] --------------------------------/
 ///
-class DrawerWidget extends StatelessWidget {
-  const DrawerWidget({
-    super.key,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    final rsize = MediaQuery.of(context).size;
-    return Drawer(
-      surfaceTintColor: MyColors.btnText,
-      child: ListView(
-        children: [
-          DrawerHeader(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(IMG.car),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Align(
-              alignment: Alignment.bottomLeft,
-              child: Text(
-                "Let's rent",
-                style: GoogleFonts.lato(
-                  color: MyColors.white,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 5,
-                  fontSize: rsize.width * 0.075,
-                ),
-              ),
-            ),
-          ),
-
-          ///--------[Rent car]
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: InkWell(
-              onTap: () async {
-                Navigator.pushNamed(context, '/rentMyCar');
-                await Provider.of<LocationProvider>(context, listen: false)
-                    .getLocationResponse(context);
-
-                // Navigator.of(context)
-                //     .push(MaterialPageRoute(builder: (context) => RentMyCar()));
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: MyColors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(rsize.width * 0.02),
-                  ),
-                ),
-                width: double.infinity,
-                height: rsize.width * 0.1,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Rent my car",
-                    style: GoogleFonts.lato(
-                      color: MyColors.btnText,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 5,
-                      fontSize: rsize.width * 0.05,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          ///-----[Order]
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: InkWell(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: MyColors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(rsize.width * 0.02),
-                  ),
-                ),
-                width: double.infinity,
-                height: rsize.width * 0.1,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Orders",
-                    style: GoogleFonts.lato(
-                      color: MyColors.btnText,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 5,
-                      fontSize: rsize.width * 0.05,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          ///----[Notification]
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: InkWell(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: MyColors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(rsize.width * 0.02),
-                  ),
-                ),
-                width: double.infinity,
-                height: rsize.width * 0.1,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Orders",
-                    style: GoogleFonts.lato(
-                      color: MyColors.btnText,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 5,
-                      fontSize: rsize.width * 0.05,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          ///-----------[Settings]
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: InkWell(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: MyColors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(rsize.width * 0.02),
-                  ),
-                ),
-                width: double.infinity,
-                height: rsize.width * 0.1,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Setings",
-                    style: GoogleFonts.lato(
-                      color: MyColors.btnText,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 5,
-                      fontSize: rsize.width * 0.05,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-///
-/*-------------------------------MY CARS[5]  list  -------------------------------------*/
-///
 class MyCars extends StatelessWidget {
   const MyCars({
     super.key,
@@ -320,68 +167,82 @@ class MyCars extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: rsize.width * 0.05),
-      child: SizedBox(
-        height: rsize.width * 0.5,
-        child: Container(
-          decoration: const BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey,
-                blurRadius: 10.0,
-                spreadRadius: 2.0,
-                offset: Offset(-0.5, -0.5),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: rsize.width * 0.5,
+    log(context.toString());
+
+    return Consumer<MyCarsProvider>(builder: (context, cars, child) {
+      return ListView.separated(
+        shrinkWrap: true,
+        physics: const ScrollPhysics(),
+        itemCount: cars.id.isEmpty ? 4 : cars.id.length,
+        separatorBuilder: (BuildContext context, int index) {
+          return SizedBox(height: rsize.width * 0.10);
+        },
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: rsize.width * 0.04),
+            child: SizedBox(
+              height: rsize.width * 0.5,
+              child: Container(
                 decoration: const BoxDecoration(
-                  color: MyColors.btnText,
-                  image: DecorationImage(
-                      image: AssetImage(IMG.car), fit: BoxFit.cover),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 10.0,
+                      spreadRadius: 2.0,
+                      offset: Offset(-0.5, -0.5),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: rsize.width * 0.5,
+                      decoration: const BoxDecoration(
+                        color: MyColors.btnText,
+                        image: DecorationImage(
+                            image: AssetImage(IMG.car), fit: BoxFit.cover),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: MyColors.white,
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(rsize.width * 0.04),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.only(top: rsize.width * 0.175),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Audi RS7',
+                                style: GoogleFonts.lato(
+                                  color: MyColors.btnText,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: rsize.width * 0.065,
+                                ),
+                              ),
+                              Text(
+                                "1500 / day",
+                                style: GoogleFonts.lato(
+                                  color: MyColors.btnText,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: rsize.width * 0.04,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: MyColors.white,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(rsize.width * 0.05),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.only(top: rsize.width * 0.175),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Audi RS7',
-                          style: GoogleFonts.lato(
-                            color: MyColors.btnText,
-                            fontWeight: FontWeight.w600,
-                            fontSize: rsize.width * 0.065,
-                          ),
-                        ),
-                        Text(
-                          "1500 / day",
-                          style: GoogleFonts.lato(
-                            color: MyColors.btnText,
-                            fontWeight: FontWeight.w600,
-                            fontSize: rsize.width * 0.05,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
+        },
+      );
+    });
   }
 }

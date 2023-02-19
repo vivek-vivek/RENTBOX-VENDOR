@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:rentbox_vendor/data/provider/my_cars.dart';
+import 'package:rentbox_vendor/models/mycars.dart';
 import 'package:rentbox_vendor/res/constant/image_name.dart';
 import 'package:rentbox_vendor/res/style/colors.dart';
 import 'package:rentbox_vendor/view_model/Google%20Map/map_screen.dart';
@@ -12,91 +15,88 @@ class SingleProductScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final rsize = MediaQuery.of(context).size;
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          // Background image
-          Container(
-            height: rsize.width * 0.75,
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(IMG.car), fit: BoxFit.cover)),
-          ),
-          Positioned(
-            top: rsize.width * 0.1,
-            child: IconButton(
-              onPressed: () => Navigator.of(context).pop(),
-              icon: const Icon(Icons.keyboard_double_arrow_left_sharp),
-            ),
-          ),
-          // Scrollable foreground
-          SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.only(top: rsize.width * 0.75),
-              child: Container(
-                color: MyColors.body,
-                height: rsize.height * 1,
-                width: double.infinity,
+      body: Consumer<MyCarsProvider>(
+        builder: (context, cars, child) {
+          return Stack(
+            children: <Widget>[
+              // Background image
+              Container(
+                height: rsize.width * 0.75,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: NetworkImage(cars.photos[cars.index].first),
+                      fit: BoxFit.cover),
+                ),
+              ),
+              Positioned(
+                top: rsize.width * 0.1,
+                child: IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.keyboard_double_arrow_left_sharp),
+                ),
+              ),
+              // Scrollable foreground
+              SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.only(
-                    top: rsize.width * 0.05,
-                    left: rsize.width * 0.05,
-                    right: rsize.width * 0.05,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+                  padding: EdgeInsets.only(top: rsize.width * 0.75),
+                  child: Container(
+                    color: MyColors.body,
+                    height: rsize.height * 1,
+                    width: double.infinity,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: rsize.width * 0.05,
+                        left: rsize.width * 0.05,
+                        right: rsize.width * 0.05,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Audi RS7',
-                            style: GoogleFonts.anonymousPro(
-                              color: MyColors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: rsize.width * 0.065,
-                            ),
-                          ),
-                          SizedBox(width: rsize.width * 0.025),
-                          Container(
-                            height: rsize.width * 0.1,
-                            decoration: BoxDecoration(
-                              color: MyColors.grey2,
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(rsize.width * 0.03)),
-                            ),
-                            child: TextButton.icon(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.verified_rounded,
-                                color: Colors.green,
-                              ),
-                              label: Text(
-                                'verified',
+                          Row(
+                            children: [
+                              Text(
+                                cars.name[cars.index],
                                 style: GoogleFonts.anonymousPro(
                                   color: MyColors.black,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: rsize.width * 0.045,
+                                  fontSize: rsize.width * 0.065,
                                 ),
                               ),
-                            ),
+                              SizedBox(width: rsize.width * 0.025),
+                              Container(
+                                height: rsize.width * 0.1,
+                                decoration: BoxDecoration(
+                                  color: MyColors.grey2,
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(rsize.width * 0.03)),
+                                ),
+                                child: ElevatedButton(
+                                  onPressed: () {},
+                                  child: Text(
+                                    cars.verified[cars.index],
+                                    style: GoogleFonts.anonymousPro(
+                                      color: MyColors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: rsize.width * 0.045,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: rsize.width * 0.025),
+                          const Expanded(
+                            child: MyTabbedPage(),
                           )
                         ],
                       ),
-                      SizedBox(height: rsize.width * 0.025),
-                      const Expanded(
-                        child: MyTabbedPage(),
-                      )
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: MyColors.btnText,
-        onPressed: () {},
-        child: const Icon(Icons.edit, color: MyColors.white),
+            ],
+          );
+        },
       ),
     );
   }
@@ -294,119 +294,148 @@ class SecondScreen extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(rsize.width * 0.03)),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  color: Colors.amber,
-                  height: rsize.width * 0.5,
-                  child: Swiper(
-                    itemBuilder: (BuildContext context, int index) {
-                      return Image.asset(
-                        images[index],
-                        fit: BoxFit.fill,
-                      );
-                    },
-                    itemCount: 3,
-                    autoplay: true,
-                    pagination: const SwiperPagination(),
+          child: Consumer<MyCarsProvider>(builder: (context, cars, child) {
+            for (var element in cars.photos) {
+              element.toString();
+            }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    color: Colors.amber,
+                    height: rsize.width * 0.5,
+                    child: Swiper(
+                      itemBuilder: (BuildContext context, int index) {
+                        return Image.network(
+                          cars.photos[cars.index][index].toString(),
+                          fit: BoxFit.cover,
+                        );
+                      },
+                      itemCount: cars.photos[cars.index].length,
+                      autoplay: true,
+                      pagination: const SwiperPagination(),
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(rsize.width * 0.025),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Icon(Icons.speed, color: MyColors.btnText),
-                    Text(
-                      "Speed",
-                      style: GoogleFonts.lato(
-                        color: MyColors.black,
-                        fontWeight: FontWeight.w500,
-                        fontSize: rsize.width * 0.045,
+                Padding(
+                  padding: EdgeInsets.all(rsize.width * 0.025),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Icon(Icons.speed, color: MyColors.btnText),
+                      Text(
+                        "Speed",
+                        style: GoogleFonts.lato(
+                          color: MyColors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: rsize.width * 0.045,
+                        ),
                       ),
-                    ),
-                    const Icon(Icons.airline_seat_recline_extra,
-                        color: MyColors.btnText),
-                    Text(
-                      "4 Seat",
-                      style: GoogleFonts.lato(
-                        color: MyColors.black,
-                        fontWeight: FontWeight.w500,
-                        fontSize: rsize.width * 0.045,
+                      const Icon(Icons.airline_seat_recline_extra,
+                          color: MyColors.btnText),
+                      Text(
+                        "4 Seat",
+                        style: GoogleFonts.lato(
+                          color: MyColors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: rsize.width * 0.045,
+                        ),
                       ),
-                    ),
-                    const Icon(Icons.local_gas_station_rounded,
-                        color: MyColors.btnText),
-                    Text(
-                      "petroll",
-                      style: GoogleFonts.lato(
-                        color: MyColors.black,
-                        fontWeight: FontWeight.w500,
-                        fontSize: rsize.width * 0.045,
+                      const Icon(Icons.local_gas_station_rounded,
+                          color: MyColors.btnText),
+                      Text(
+                        "petroll",
+                        style: GoogleFonts.lato(
+                          color: MyColors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: rsize.width * 0.045,
+                        ),
                       ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: rsize.width * 0.2, top: rsize.width * 0.025),
+                  child: Container(
+                    width: rsize.width * 0.5,
+                    decoration: BoxDecoration(
+                      color: MyColors.body,
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(rsize.width * 0.03)),
                     ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: rsize.width * 0.2, top: rsize.width * 0.025),
-                child: Container(
-                  width: rsize.width * 0.5,
-                  decoration: BoxDecoration(
-                    color: MyColors.body,
-                    borderRadius:
-                        BorderRadius.all(Radius.circular(rsize.width * 0.03)),
-                  ),
-                  child: Text(
-                    "1500 / day",
-                    style: GoogleFonts.anonymousPro(
-                      color: MyColors.btnText,
-                      fontWeight: FontWeight.w700,
-                      fontSize: rsize.width * 0.075,
+                    child: Text(
+                      "${cars.price[cars.index]}/ day",
+                      style: GoogleFonts.anonymousPro(
+                        color: MyColors.btnText,
+                        fontWeight: FontWeight.w700,
+                        fontSize: rsize.width * 0.075,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: rsize.width * 0.025, top: rsize.width * 0.025),
-                child: Text(
-                  "Documents",
-                  style: GoogleFonts.anonymousPro(
-                    color: MyColors.btnText,
-                    fontWeight: FontWeight.w700,
-                    fontSize: rsize.width * 0.055,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  color: Colors.amber,
-                  height: rsize.width * 0.5,
-                  child: Swiper(
-                    itemBuilder: (BuildContext context, int index) {
-                      return Image.asset(
-                        images[index],
-                        fit: BoxFit.fill,
-                      );
-                    },
-                    itemCount: 3,
-                    autoplay: true,
-                    pagination: const SwiperPagination(),
-                  ),
-                ),
-              ),
-            ],
-          ),
+                TexDatas(
+                    rsize: rsize,
+                    rcNumber: cars.rcNumber[cars.index].toString(),
+                    title: 'Rc Number'),
+                TexDatas(
+                    rsize: rsize,
+                    rcNumber: cars.seatNum[cars.index].toString(),
+                    title: 'Location'),
+                TexDatas(
+                    rsize: rsize,
+                    rcNumber: cars.locationName[cars.index].toString(),
+                    title: 'Total Seats'),
+              ],
+            );
+          }),
         ),
+      ),
+    );
+  }
+}
+
+class TexDatas extends StatelessWidget {
+  const TexDatas({
+    super.key,
+    required this.rsize,
+    required this.rcNumber,
+    required this.title,
+  });
+
+  final Size rsize;
+  final String rcNumber;
+  final String title;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+          left: rsize.width * 0.025,
+          top: rsize.width * 0.025,
+          right: rsize.width * 0.025),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: GoogleFonts.anonymousPro(
+              color: MyColors.btnText,
+              fontWeight: FontWeight.w700,
+              fontSize: rsize.width * 0.045,
+            ),
+          ),
+          Text(
+            rcNumber,
+            style: GoogleFonts.anonymousPro(
+              color: MyColors.btnText,
+              fontWeight: FontWeight.w700,
+              fontSize: rsize.width * 0.045,
+            ),
+          ),
+        ],
       ),
     );
   }

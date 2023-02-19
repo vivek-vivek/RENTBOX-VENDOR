@@ -2,6 +2,27 @@ import 'dart:convert';
 
 class MyCarsModel {
   MyCarsModel({
+    required this.cars,
+  });
+
+  List<Car> cars;
+
+  factory MyCarsModel.fromRawJson(String str) =>
+      MyCarsModel.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory MyCarsModel.fromJson(Map<String, dynamic> json) => MyCarsModel(
+        cars: List<Car>.from(json["cars"].map((x) => Car.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "cars": List<dynamic>.from(cars.map((x) => x.toJson())),
+      };
+}
+
+class Car {
+  Car({
     required this.id,
     required this.seatNum,
     required this.location,
@@ -21,12 +42,11 @@ class MyCarsModel {
   String verified;
   List<String> photos;
 
-  factory MyCarsModel.fromRawJson(String str) =>
-      MyCarsModel.fromJson(json.decode(str));
+  factory Car.fromRawJson(String str) => Car.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory MyCarsModel.fromJson(Map<String, dynamic> json) => MyCarsModel(
+  factory Car.fromJson(Map<String, dynamic> json) => Car(
         id: json["_id"],
         seatNum: json["seatNum"],
         location: Location.fromJson(json["location"]),

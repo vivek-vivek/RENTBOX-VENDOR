@@ -10,9 +10,8 @@ import 'package:rentbox_vendor/res/constant/urls.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddCarServices {
-  final dio = Dio();
-
   Future<void> addNewCar(context) async {
+    final dio = Dio();
     Provider.of<AddCarProvider>(context, listen: false).loading(true);
     // SHARED PRIFERENCE OBJECT
     final pro = Provider.of<AddCarProvider>(context, listen: false);
@@ -21,6 +20,7 @@ class AddCarServices {
     /// passing [ACCESTOKENS] in to header
     final dynamic ACCESS_TOKEN = prefs.getString('ACCESS_TOKEN');
     dio.options.headers["Authorization"] = "Bearer $ACCESS_TOKEN";
+    log(" dxxgfchjhjlk $ACCESS_TOKEN");
 
     /// Data Object for Send Data in to API
     final addCarOrderModel = AddCarOrderModel(

@@ -11,6 +11,11 @@ class ApiUrls {
   static const otpVerify = "/otpVerify";
   static const setup = "/setup";
   static const addCar = "/addCar";
+  static const myCars = "/myCars";
+  static const bookings = '/bookings';
+  static const profile = '/profile';
+  static const sendOtp = '/sendOtp';
+  static const profilePic = '/profilePic';
 }
 
 class CloudinoryApi {

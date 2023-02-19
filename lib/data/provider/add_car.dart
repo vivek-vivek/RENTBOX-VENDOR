@@ -41,11 +41,15 @@ class AddCarProvider with ChangeNotifier {
   TextEditingController oilctrl = TextEditingController();
   TextEditingController gearctrl = TextEditingController();
 
+  /// Globel Keys
+  GlobalKey<FormState> carBasicsKey = GlobalKey<FormState>();
+
   ///-------------------------------[   FUNCTIONS  ]------------------------------
   /// Radio button for [Gear Type]
   setoilRadio(val) {
     oilctrl.text = val.toString();
     selecteOildRadio = val;
+    log(val.toString());
     notifyListeners();
   }
 
@@ -64,6 +68,7 @@ class AddCarProvider with ChangeNotifier {
   setSeatNum(val) {
     seatNumctrl.text = val;
     intseatNum = int.parse(val);
+    log(intseatNum.toString());
     notifyListeners();
   }
 
@@ -99,6 +104,7 @@ class AddCarProvider with ChangeNotifier {
 
   setGear(val) {
     gearctrl.text = val;
+    selecteGeardRadio = val;
   }
 
   // check requerid data
@@ -173,9 +179,9 @@ class AddCarProvider with ChangeNotifier {
       apiSecret: CloudinoryApi.SECRET,
       cloudName: CloudinoryApi.NAME,
     );
-    log('Post doquments images into cloudinory  serverr...');
+    log('Post car images into cloudinory  serverr...');
 
-    for (var image in doqumentFile) {
+    for (var image in carFile) {
       final response = await cloudinary.upload(
           file: image.path,
           resourceType: CloudinaryResourceType.image,
@@ -183,10 +189,10 @@ class AddCarProvider with ChangeNotifier {
           fileName: image.name);
 
       if (response.isSuccessful) {
-        log(response.statusCode.toString());
+        // log(response.statusCode.toString());
         cloudinoryCarURL.add(response.secureUrl.toString());
         notifyListeners();
-        log('For doquement visit -->  ${response.secureUrl}  ----> * SUCCESS * ');
+        log('For car visit -->  ${response.secureUrl}  ----> * SUCCESS * ');
       } else {
         commonSnackBar(text: "Failed to upload images", context: context);
       }

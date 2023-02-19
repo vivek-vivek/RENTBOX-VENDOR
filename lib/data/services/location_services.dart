@@ -11,8 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LocationServices {
   final Dio dio = Dio();
   Future<List<LocationModel>> getLocations(context) async {
-    Response response = await dio.get(ApiUrls.baseUrl + ApiUrls.setup);
-
     try {
       // SHARED PRIFERENCE OBJECT
       final prefs = await SharedPreferences.getInstance();
@@ -22,6 +20,7 @@ class LocationServices {
 
       dio.options.headers["Authorization"] = "Bearer $ACCESS_TOKEN";
       log(ACCESS_TOKEN);
+      Response response = await dio.get(ApiUrls.baseUrl + ApiUrls.setup);
       if (response.statusCode == 201) {
         List<LocationModel> locatiomModel = [];
         LocationModel mapJson = LocationModel.fromJson(response.data);

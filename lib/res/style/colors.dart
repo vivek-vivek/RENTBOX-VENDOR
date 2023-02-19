@@ -10,4 +10,5 @@ class MyColors {
   static const grey = Color.fromARGB(255, 161, 154, 154);
   static const grey2 = Color.fromARGB(255, 207, 204, 204);
   static const white24 = Colors.white24;
+  static const green = Colors.green;
 }

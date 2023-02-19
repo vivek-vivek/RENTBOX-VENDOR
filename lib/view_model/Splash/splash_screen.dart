@@ -1,17 +1,15 @@
-// ignore_for_file: must_be_immutable
-
+import 'dart:async';
 import 'dart:developer';
-
-import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:rentbox_vendor/data/provider/change_data.dart';
 import 'package:rentbox_vendor/data/provider/my_cars.dart';
-import 'package:rentbox_vendor/res/style/colors.dart';
 import 'package:rentbox_vendor/view_model/Vendor%20Auth/login.dart';
 import 'package:rentbox_vendor/view_model/home/home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SplashScreen extends StatelessWidget {
+// ignore: must_be_immutable
+class SplashScreen extends StatefulWidget {
   bool isLoggedIn;
 
   SplashScreen({
@@ -20,34 +18,40 @@ class SplashScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-    //   await Provider.of<MyCarsProvider>(context, listen: false)
-    //       .getMyCars(context: context);
-    // });
+  State<SplashScreen> createState() => _SplashScreenState();
+}
 
-    log(isLoggedIn.toString());
-    final rsize = MediaQuery.of(context).size;
-    return AnimatedSplashScreen(
-      duration: 3000,
-      backgroundColor: Colors.black,
-      splash: SizedBox(
-        width: 5000,
-        child: Center(
-          child: Text(
-            "RENTBOX- VENDOR",
-            style: GoogleFonts.truculenta(
-              color: MyColors.black,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 10,
-              fontSize: rsize.width * 0.1,
-            ),
-          ),
-        ),
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(
+      const Duration(seconds: 3),
+      () => Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                widget.isLoggedIn == true ? const HomeScreen() : LoginScreen()),
       ),
-      nextScreen: isLoggedIn == true ? const HomeScreen() : LoginScreen(),
-      // nextScreen: const HomeScreen(),
-      splashTransition: SplashTransition.fadeTransition,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      final prefs = await SharedPreferences.getInstance();
+      final a = prefs.getString('Profile');
+      Provider.of<ChangeBasicsProvider>(context, listen: false)
+          .setProf(a.toString());
+    });
+
+    log(widget.isLoggedIn.toString());
+
+    return const Scaffold(
+      body: Center(
+        child: Text("Vendor Box"),
+      ),
     );
   }
 }
+// "lib/view/assets/images/spla.png",
