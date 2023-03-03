@@ -6,8 +6,8 @@ class BookingModel {
     required this.completedEvents,
   });
 
-  List<dynamic> upComingEvents;
-  List<CompletedEvent> completedEvents;
+  List<Event> upComingEvents;
+  List<Event> completedEvents;
 
   factory BookingModel.fromRawJson(String str) =>
       BookingModel.fromJson(json.decode(str));
@@ -15,21 +15,22 @@ class BookingModel {
   String toRawJson() => json.encode(toJson());
 
   factory BookingModel.fromJson(Map<String, dynamic> json) => BookingModel(
-        upComingEvents:
-            List<dynamic>.from(json["upComingEvents"].map((x) => x)),
-        completedEvents: List<CompletedEvent>.from(
-            json["completedEvents"].map((x) => CompletedEvent.fromJson(x))),
+        upComingEvents: List<Event>.from(
+            json["upComingEvents"].map((x) => Event.fromJson(x))),
+        completedEvents: List<Event>.from(
+            json["completedEvents"].map((x) => Event.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "upComingEvents": List<dynamic>.from(upComingEvents.map((x) => x)),
+        "upComingEvents":
+            List<dynamic>.from(upComingEvents.map((x) => x.toJson())),
         "completedEvents":
             List<dynamic>.from(completedEvents.map((x) => x.toJson())),
       };
 }
 
-class CompletedEvent {
-  CompletedEvent({
+class Event {
+  Event({
     required this.id,
     required this.gearType,
     required this.fuelType,
@@ -73,12 +74,11 @@ class CompletedEvent {
   int v;
   MyOrders myOrders;
 
-  factory CompletedEvent.fromRawJson(String str) =>
-      CompletedEvent.fromJson(json.decode(str));
+  factory Event.fromRawJson(String str) => Event.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory CompletedEvent.fromJson(Map<String, dynamic> json) => CompletedEvent(
+  factory Event.fromJson(Map<String, dynamic> json) => Event(
         id: json["_id"],
         gearType: json["gearType"],
         fuelType: json["fuelType"],

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:rentbox_vendor/data/services/booking_server.dart';
 import 'package:rentbox_vendor/models/bookings_model.dart';
+import 'package:rentbox_vendor/view_model/bookings/order_details.dart';
 
 class BookingProvider extends ChangeNotifier {
   bool isLoading = false;
@@ -12,8 +13,8 @@ class BookingProvider extends ChangeNotifier {
 
   /*---------------------------API RESPONSE DATA-------------------------------*/
 
-  List<dynamic> upCommingEvents = [];
-  List<CompletedEvent> completedEvents = [];
+  List<Event> upCommingEvents = [];
+  List<Event> completedEvents = [];
 
   /*----------------------------UPCOMMING CARS DATA----------------------------*/
 
@@ -141,9 +142,50 @@ class BookingProvider extends ChangeNotifier {
     notifyListeners();
     for (var element in response) {
       upCommingEvents.addAll(element.upComingEvents);
+      log('response : ${element.upComingEvents}');
 
       notifyListeners();
     }
+// UPCOMMING PICKUPS
+    for (var element in upCommingEvents) {
+      log('carname : ${element.name}');
+      carName.add(element.name);
+      gearType.add(element.gearType);
+      photos.add(element.photos);
+      fuelType.add(element.fuelType);
+      rcNumber.add(element.rcNumber);
+      seatNum.add(element.seatNum);
+      carId.add(element.id);
+      myorders.add(element.myOrders);
+      notifyListeners();
+    }
+
+    for (var element in myorders) {
+      exId.add(element.id);
+      pickupDate.add(element.pickupDate);
+      pickupTime.add(element.pickupTime);
+      dropOffDate.add(element.dropOffDate);
+      dropOffTime.add(element.dropOffTime);
+      pickup.add(element.pickup);
+      price.add(element.price);
+      notifyListeners();
+    }
+    // PICKUP
+    for (var element in pickup) {
+      name.add(element.name);
+      id.add(element.id);
+      coords.add(element.coords);
+      notifyListeners();
+    }
+
+    // COORDS
+    for (var element in coords) {
+      lat.add(element.lat);
+      lng.add(element.lng);
+      notifyListeners();
+    }
+
+    loading(false);
 
     notifyListeners();
   }
